@@ -14,13 +14,19 @@ in **pure PHP**.
 
 ![](https://habrastorage.org/webt/xd/8u/dn/xd8udncjdbysbj4dglahj8kfizw.png)
 
-## Requiremens
+Demo in action: https://www.youtube.com/watch?v=vsBbJbhKeeU
+
+## Requirements
 
 - PHP 7.4+
 - ext-ffi
 - [Composer](https://getcomposer.org/download/)
-- SDL2 (only MacOS and Linux)
-- SDL2 Image (only MacOS and Linux)
+
+### Additional Requirements (MacOS and Linux only)
+
+- SDL 2.0+
+- SDL Image 2.0+
+- SDL TTF 2.0+
 
 ## Installation
 
@@ -33,12 +39,19 @@ in **pure PHP**.
 
 - `sudo apt install libsdl2-2.0-0 -y`
 - `sudo apt install libsdl2-image-2.0-0 -y`
+- `sudo apt install libsdl2-ttf-2.0-0 -y`
 - `composer install`
 - `php app.php`
+
+### Linux / Docker
+
+- `docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY -e XAUTHORITY=$XAUTHORITY $(docker build -q .)`
 
 ### MacOS
 
 - `brew install sdl2`
 - `brew install sdl2_image`
+- `brew install sdl2_ttf`
 - `composer install`
 - `php app.php`
+

@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Serafim\Bic\Renderer;
 
 use FFI\CData;
+use Serafim\SDL\SDLNativeApiAutocomplete;
 use Serafim\Bic\Math\Vector2;
 use Serafim\Bic\Native;
-use Serafim\Bic\Renderer\Viewport\ViewportInterface;
 use Serafim\Bic\Util;
 use Serafim\SDL\Kernel\Video\BlendMode;
 use Serafim\SDL\RectPtr;
@@ -58,7 +58,7 @@ class Texture extends Native
      */
     public function openTarget(RendererInterface $renderer): void
     {
-        $this->sdl->setRenderTarget($renderer->getPointer(), $this->ptr);
+        $this->sdl->SDL_SetRenderTarget($renderer->getPointer(), $this->ptr);
     }
 
     /**
@@ -67,7 +67,7 @@ class Texture extends Native
      */
     public function closeTarget(RendererInterface $renderer): void
     {
-        $this->sdl->setRenderTarget($renderer->getPointer(), null);
+        $this->sdl->SDL_SetRenderTarget($renderer->getPointer(), null);
     }
 
     /**
@@ -106,11 +106,20 @@ class Texture extends Native
      */
     public static function fromPathname(RendererInterface $renderer, string $pathname): self
     {
+        return self::fromSurface($renderer, Surface::fromPathname($pathname));
+    }
+
+    /**
+     * @param RendererInterface $renderer
+     * @param Surface $surface
+     * @return $this
+     */
+    public static function fromSurface(RendererInterface $renderer, Surface $surface): self
+    {
+        /** @var SDLNativeApiAutocomplete $sdl */
         $sdl = SDL::getInstance();
 
-        $surface = Surface::fromPathname($pathname);
-
-        $texture = $sdl->createTextureFromSurface($renderer->getPointer(), $surface->getPointer());
+        $texture = $sdl->SDL_CreateTextureFromSurface($renderer->getPointer(), $surface->getPointer());
 
         return new static($texture, $surface->getClipRect());
     }
@@ -121,7 +130,7 @@ class Texture extends Native
      */
     public function blending(int $mode = BlendMode::SDL_BLENDMODE_NONE): void
     {
-        $this->sdl->setTextureBlendMode($this->ptr, $mode);
+        $this->sdl->SDL_SetTextureBlendMode($this->ptr, $mode);
     }
 
     /**
@@ -130,7 +139,7 @@ class Texture extends Native
      */
     public function alpha(float $alpha): void
     {
-        $this->sdl->setTextureAlphaMod($this->ptr, $alpha);
+        $this->sdl->SDL_SetTextureAlphaMod($this->ptr, $alpha);
     }
 
     /**
@@ -141,6 +150,6 @@ class Texture extends Native
      */
     public function color(int $red = 0, int $green = 0, int $blue = 0): void
     {
-        $this->sdl->setTextureColorMod($this->ptr, $red, $green, $blue);
+        $this->sdl->SDL_SetTextureColorMod($this->ptr, $red, $green, $blue);
     }
 }
